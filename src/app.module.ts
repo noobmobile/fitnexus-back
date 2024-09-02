@@ -9,6 +9,7 @@ import { RolesGuard } from './routes/auth/guards/role-auth.guard';
 import { NotificationModule } from './routes/notification/notification.module';
 import { PostModule } from './routes/post/post.module';
 import { TrainingDateModule } from './routes/training_dates/training_date.module';
+import { ExerciseModule } from './routes/exercise/exercise.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { TrainingDateModule } from './routes/training_dates/training_date.module
     NotificationModule,
     PostModule,
     TrainingDateModule,
+    ExerciseModule,
   ],
   providers: [
     {

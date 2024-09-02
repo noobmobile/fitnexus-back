@@ -19,6 +19,8 @@ export class RolesGuard implements CanActivate {
     if (requiredRoles.includes(UserRole.User)) {
       return true;
     }
-    return requiredRoles.includes(user.role);
+    const index = Object.values(UserRole).indexOf(requiredRoles[0]);
+    const userIndex = Object.values(UserRole).indexOf(user.role);
+    return userIndex >= index;
   }
 }
