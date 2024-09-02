@@ -3,6 +3,7 @@ import { Exclude } from 'class-transformer';
 import { UserRole } from 'src/routes/auth/models/UserRole';
 import { Notification } from 'src/routes/notification/entities/notification.entity';
 import { Post } from 'src/routes/post/entities/post.entity';
+import { TrainingDate } from 'src/routes/training_dates/entities/training_date.entity';
 import {
   Column,
   Entity,
@@ -66,4 +67,7 @@ export class User {
 
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
+
+  @OneToMany(() => TrainingDate, (trainingDate) => trainingDate.user)
+  trainingDates: TrainingDate[];
 }

@@ -8,6 +8,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './routes/auth/guards/role-auth.guard';
 import { NotificationModule } from './routes/notification/notification.module';
 import { PostModule } from './routes/post/post.module';
+import { TrainingDateModule } from './routes/training_dates/training_date.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { PostModule } from './routes/post/post.module';
     AuthModule,
     NotificationModule,
     PostModule,
+    TrainingDateModule,
   ],
   providers: [
     {
