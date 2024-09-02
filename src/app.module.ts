@@ -10,6 +10,7 @@ import { NotificationModule } from './routes/notification/notification.module';
 import { PostModule } from './routes/post/post.module';
 import { TrainingDateModule } from './routes/training_dates/training_date.module';
 import { ExerciseModule } from './routes/exercise/exercise.module';
+import { TrainingModule } from './routes/training/training.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ExerciseModule } from './routes/exercise/exercise.module';
     PostModule,
     TrainingDateModule,
     ExerciseModule,
+    TrainingModule,
   ],
   providers: [
     {
