@@ -94,7 +94,9 @@ export class UserService extends BaseService<
     const requester = await super.findOne(requesterId, {
       relations: ['friends', 'friendRequests'],
     });
-    const requested = await super.findOne(requestedId);
+    const requested = await super.findOne(requestedId, {
+      relations: ['friends'],
+    });
     if (!requester || !requested) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
