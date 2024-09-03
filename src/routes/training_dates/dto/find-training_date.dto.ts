@@ -1,4 +1,4 @@
-import { IsDateString, IsNumber, IsOptional } from 'class-validator';
+import { IsBoolean, IsDateString, IsNumber, IsOptional } from 'class-validator';
 import { BaseFilter, BaseFilterResponse } from '../../../base/base.filter';
 import { TrainingDate } from '../entities/training_date.entity';
 
@@ -13,4 +13,7 @@ export class TrainingDateFilter extends BaseFilter {
   @IsOptional()
   @IsDateString()
   date: Date;
+  @IsOptional()
+  @IsBoolean()
+  isThisWeek: boolean;
 }

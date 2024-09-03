@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { Between, FindOptionsWhere, Repository } from 'typeorm';
 import { BaseService } from '../../base/base.service';
 import { CreateTrainingDateDto } from './dto/create-training_date.dto';
 import { TrainingDateFilter } from './dto/find-training_date.dto';
@@ -23,6 +23,9 @@ export class TrainingDateService extends BaseService<
   findAll(filter: TrainingDateFilter) {
     const where = {} as FindOptionsWhere<TrainingDate>;
     if (filter.userId) where.user = { id: filter.userId };
+    if (filter.isThisWeek) {
+      where.date = Between(startOfWeek(), endOfWeek());
+    }
     return super.findAll(filter, {
       where,
     });
@@ -43,4 +46,18 @@ export class TrainingDateService extends BaseService<
     }
     return super.create(createDto);
   }
+}
+
+function startOfWeek() {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  start.setDate(start.getDate() - start.getDay());
+  return start;
+}
+
+function endOfWeek() {
+  const now = new Date();
+  const end = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  end.setDate(end.getDate() + (6 - end.getDay()));
+  return end;
 }

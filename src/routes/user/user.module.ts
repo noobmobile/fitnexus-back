@@ -5,9 +5,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { PostModule } from '../post/post.module';
 import { TrainingModule } from '../training/training.module';
+import { TrainingDateModule } from '../training_dates/training_date.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), PostModule, TrainingModule],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    PostModule,
+    TrainingModule,
+    TrainingDateModule,
+  ],
   exports: [UserService],
   providers: [UserService],
   controllers: [UserController],

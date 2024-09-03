@@ -11,6 +11,8 @@ import { BaseFilter } from 'src/base/base.filter';
 import { PostService } from '../post/post.service';
 import { PostFilter } from '../post/dto/find-post.dto';
 import { TrainingService } from '../training/training.service';
+import { TrainingDateService } from '../training_dates/training_date.service';
+import { TrainingDateFilter } from '../training_dates/dto/find-training_date.dto';
 
 @Injectable()
 export class UserService extends BaseService<
@@ -23,6 +25,7 @@ export class UserService extends BaseService<
     private userRepository: Repository<User>,
     private readonly postService: PostService,
     private readonly trainingService: TrainingService,
+    private readonly trainingDateService: TrainingDateService,
   ) {
     super(userRepository);
   }
@@ -158,6 +161,12 @@ export class UserService extends BaseService<
     ).data;
     user.trainings = (
       await this.trainingService.findUserTrainings({} as BaseFilter, id)
+    ).data;
+    user.training_dates = (
+      await this.trainingDateService.findAll({
+        userId: id,
+        isThisWeek: true,
+      } as TrainingDateFilter)
     ).data;
     return user;
   }
