@@ -8,6 +8,9 @@ import { UserFilter } from './dto/find-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { BaseFilter } from 'src/base/base.filter';
+import { PostService } from '../post/post.service';
+import { PostFilter } from '../post/dto/find-post.dto';
+import { TrainingService } from '../training/training.service';
 
 @Injectable()
 export class UserService extends BaseService<
@@ -18,6 +21,8 @@ export class UserService extends BaseService<
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private readonly postService: PostService,
+    private readonly trainingService: TrainingService,
   ) {
     super(userRepository);
   }
@@ -140,5 +145,18 @@ export class UserService extends BaseService<
         },
       },
     });
+  }
+
+  async findProfile(id: number) {
+    const user = (await super.findOne(id, {
+      relations: ['friends', 'friendRequests'],
+    })) as any;
+    user.posts = (
+      await this.postService.findAll({ userId: id } as PostFilter)
+    ).data;
+    user.trainings = (
+      await this.trainingService.findUserTrainings({} as BaseFilter, id)
+    ).data;
+    return user;
   }
 }

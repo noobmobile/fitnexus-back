@@ -43,7 +43,7 @@ export class TrainingService extends BaseService<
   async findUserTrainings(filter: BaseFilter, userId: number) {
     return super.findAll(filter, {
       where: { users: { id: userId } },
-      relations: ['exercises'],
+      relations: ['exercises', 'exercises.exercise'],
     });
   }
 }

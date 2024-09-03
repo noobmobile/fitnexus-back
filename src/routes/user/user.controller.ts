@@ -62,4 +62,10 @@ export class UserController extends ControllerFactory<
   rejectFriend(@Param('id') id: number, @CurrentUser() user: User) {
     return this.userService.rejectFriend(id, user.id);
   }
+
+  @Get('profile/:id')
+  @Roles(UserRole.User)
+  findProfile(@Param('id') id: number) {
+    return this.userService.findProfile(id);
+  }
 }
