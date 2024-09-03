@@ -176,6 +176,7 @@ export class UserService extends BaseService<
         isThisWeek: true,
       } as TrainingDateFilter)
     ).data;
+    user.conquests = await this.conquestService.findUserConquests(id);
     return user;
   }
 }
