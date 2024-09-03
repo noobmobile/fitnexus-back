@@ -6,6 +6,7 @@ import { User } from './entities/user.entity';
 import { PostModule } from '../post/post.module';
 import { TrainingModule } from '../training/training.module';
 import { TrainingDateModule } from '../training_dates/training_date.module';
+import { ConquestModule } from '../conquest/conquest.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { TrainingDateModule } from '../training_dates/training_date.module';
     PostModule,
     TrainingModule,
     TrainingDateModule,
+    ConquestModule,
   ],
   exports: [UserService],
   providers: [UserService],

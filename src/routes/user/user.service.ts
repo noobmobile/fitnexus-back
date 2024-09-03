@@ -13,6 +13,7 @@ import { PostFilter } from '../post/dto/find-post.dto';
 import { TrainingService } from '../training/training.service';
 import { TrainingDateService } from '../training_dates/training_date.service';
 import { TrainingDateFilter } from '../training_dates/dto/find-training_date.dto';
+import { ADICIONAR_AMIGO, ConquestService } from '../conquest/conquest.service';
 
 @Injectable()
 export class UserService extends BaseService<
@@ -26,6 +27,7 @@ export class UserService extends BaseService<
     private readonly postService: PostService,
     private readonly trainingService: TrainingService,
     private readonly trainingDateService: TrainingDateService,
+    private readonly conquestService: ConquestService,
   ) {
     super(userRepository);
   }
@@ -116,7 +118,13 @@ export class UserService extends BaseService<
     requested.friends.push(requester);
     await this.userRepository.save(requester);
     await this.userRepository.save(requested);
+    await this.checkConquests(requester, requested);
     return { status: HttpStatus.OK };
+  }
+
+  async checkConquests(requester: User, requested: User) {
+    this.conquestService.addConquest(ADICIONAR_AMIGO, requester.id);
+    this.conquestService.addConquest(ADICIONAR_AMIGO, requested.id);
   }
 
   async findFriends(filter: BaseFilter, user: User) {

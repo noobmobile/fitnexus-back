@@ -6,6 +6,7 @@ import { CreateTrainingDateDto } from './dto/create-training_date.dto';
 import { TrainingDateFilter } from './dto/find-training_date.dto';
 import { UpdateTrainingDateDto } from './dto/update-training_date.dto';
 import { TrainingDate } from './entities/training_date.entity';
+import { ConquestService, PRIMEIRO_TREINO } from '../conquest/conquest.service';
 
 @Injectable()
 export class TrainingDateService extends BaseService<
@@ -16,6 +17,7 @@ export class TrainingDateService extends BaseService<
   constructor(
     @InjectRepository(TrainingDate)
     private trainingdateRepository: Repository<TrainingDate>,
+    private readonly conquestService: ConquestService,
   ) {
     super(trainingdateRepository);
   }
@@ -44,7 +46,12 @@ export class TrainingDateService extends BaseService<
         HttpStatus.BAD_REQUEST,
       );
     }
+    await this.checkConquests(createDto.user.id);
     return super.create(createDto);
+  }
+
+  async checkConquests(userId: number) {
+    this.conquestService.addConquest(PRIMEIRO_TREINO, userId);
   }
 }
 

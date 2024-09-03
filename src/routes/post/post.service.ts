@@ -6,6 +6,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { PostFilter } from './dto/find-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './entities/post.entity';
+import { ConquestService, RECEBER_CURTIDA } from '../conquest/conquest.service';
 
 @Injectable()
 export class PostService extends BaseService<
@@ -16,6 +17,7 @@ export class PostService extends BaseService<
   constructor(
     @InjectRepository(Post)
     private postRepository: Repository<Post>,
+    private readonly conquestService: ConquestService,
   ) {
     super(postRepository);
   }
@@ -31,7 +33,7 @@ export class PostService extends BaseService<
 
   async likePost(userId: number, postId: number) {
     const post = await this.findOne(postId, {
-      relations: ['likes'],
+      relations: ['likes', 'user'],
     });
     if (!post.likes) post.likes = [];
     if (post.likes.some((like) => like.id === userId)) {
@@ -39,6 +41,7 @@ export class PostService extends BaseService<
     } else {
       post.likes.push({ id: userId } as any);
     }
+    await this.conquestService.addConquest(RECEBER_CURTIDA, post.user.id);
     return await this.postRepository.save(post);
   }
 }
