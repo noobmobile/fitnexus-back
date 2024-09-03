@@ -15,6 +15,8 @@ export class Training {
   id: number;
   @Column()
   name: string;
+  @Column({ nullable: true })
+  image: string;
   @OneToMany(() => TrainingExercise, (exercise) => exercise.training, {
     eager: true,
     cascade: true,

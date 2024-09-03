@@ -27,6 +27,8 @@ export class CreateTrainingExerciseDto {
 export class CreateTrainingDto {
   @IsString()
   name: string;
+  @IsString()
+  image: string;
   @ValidateNested()
   @Type(() => CreateTrainingExerciseDto)
   exercises: CreateTrainingExerciseDto[];
