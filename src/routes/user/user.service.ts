@@ -71,6 +71,20 @@ export class UserService extends BaseService<
     return { status: HttpStatus.OK };
   }
 
+  async rejectFriend(requesterId: number, requestedId: number) {
+    const requester = await super.findOne(requesterId, {
+      relations: ['friendRequests'],
+    });
+    if (!requester) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    requester.friendRequests = requester.friendRequests.filter(
+      (user) => user.id !== requestedId,
+    );
+    await this.userRepository.save(requester);
+    return { status: HttpStatus.OK };
+  }
+
   async acceptFriend(requesterId: number, requestedId: number) {
     const requester = await super.findOne(requesterId, {
       relations: ['friends', 'friendRequests'],
