@@ -139,16 +139,21 @@ export class UserService extends BaseService<
   }
 
   async findSuggestions(filter: UserFilter, user: User) {
-    const { friends } = await super.findOne(user.id, {
-      relations: ['friends'],
+    const { friends, friendRequests } = await super.findOne(user.id, {
+      relations: ['friends', 'friendRequests'],
     });
-    return super.findAll(filter, {
+    const data = await super.findAll(filter, {
       where: {
         id: Not(In([user.id, ...friends.map((friend) => friend.id)])),
         name: ILike(`%${filter.name}%`),
       },
-      relations: ['friendRequests'],
     });
+    data.data.forEach((user: any) => {
+      user.solicitated = !!friendRequests.find(
+        (friend) => friend.id === user.id,
+      );
+    });
+    return data;
   }
 
   async findRequests(filter: BaseFilter, user: User) {
