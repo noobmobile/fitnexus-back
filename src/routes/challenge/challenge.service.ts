@@ -43,7 +43,7 @@ export class ChallengeService extends BaseService<
 
   async findMyChallenges(filter: ChallengeFilter, userId: number) {
     filter.requesterId = userId;
-    filter.requesterId = userId;
+    filter.requestedId = userId;
     return this.findAll(filter);
   }
 
