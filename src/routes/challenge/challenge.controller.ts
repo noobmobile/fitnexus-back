@@ -13,6 +13,7 @@ import { UserRole } from '../auth/models/UserRole';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { User } from '../user/entities/user.entity';
 import { Roles } from '../auth/decorators/role.decorator';
+import { ChallengeStatus } from './entities/challenge.status';
 
 @Controller('challenge')
 @ApiTags('challenge')
@@ -39,7 +40,8 @@ export class ChallengeController extends ControllerFactory<
     @CurrentUser() user: User,
     @Query() filter: ChallengeFilter,
   ) {
-    return this.service.findRequestedsChallenges(filter, user.id);
+    filter.status = ChallengeStatus.Pending;
+    return this.service.findMyChallenges(filter, user.id);
   }
 
   @Get('me')
@@ -48,6 +50,7 @@ export class ChallengeController extends ControllerFactory<
     @CurrentUser() user: User,
     @Query() filter: ChallengeFilter,
   ) {
+    filter.status = ChallengeStatus.Accepted;
     return this.service.findMyChallenges(filter, user.id);
   }
 

@@ -41,16 +41,9 @@ export class ChallengeService extends BaseService<
     });
   }
 
-  async findRequestedsChallenges(filter: ChallengeFilter, userId: number) {
-    filter.requestedId = userId;
-    filter.status = ChallengeStatus.Pending;
-    return this.findAll(filter);
-  }
-
   async findMyChallenges(filter: ChallengeFilter, userId: number) {
     filter.requesterId = userId;
     filter.requesterId = userId;
-    filter.status = ChallengeStatus.Accepted;
     return this.findAll(filter);
   }
 
