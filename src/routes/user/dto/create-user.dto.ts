@@ -13,8 +13,10 @@ export class CreateUserDto {
   @IsString()
   description: string;
   @IsNumber()
+  @IsOptional()
   age: number;
   @IsNumber()
+  @IsOptional()
   weight: number;
   @IsString()
   login: string;
