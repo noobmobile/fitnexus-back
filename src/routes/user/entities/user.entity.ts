@@ -34,10 +34,10 @@ export class User {
   @Column()
   description: string;
 
-  @Column()
+  @Column({ nullable: true })
   age: number;
 
-  @Column()
+  @Column({ nullable: true })
   weight: number;
 
   @Column({ unique: true })
