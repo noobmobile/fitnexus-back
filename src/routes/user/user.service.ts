@@ -144,7 +144,7 @@ export class UserService extends BaseService<
     });
     return super.findAll(filter, {
       where: {
-        id: Not(In(friends.map((friend) => friend.id))),
+        id: Not(In([user.id, ...friends.map((friend) => friend.id)])),
         name: ILike(`%${filter.name}%`),
       },
       relations: ['friendRequests'],
