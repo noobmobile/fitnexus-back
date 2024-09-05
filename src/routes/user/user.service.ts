@@ -149,7 +149,7 @@ export class UserService extends BaseService<
       },
     });
     data.data.forEach((u: any) => {
-      u.solicitated = !!friendRequests.find((friend) => friend.id === user.id);
+      u.solicitated = !!friendRequests.find((friend) => friend.id === u.id);
     });
     return data;
   }
