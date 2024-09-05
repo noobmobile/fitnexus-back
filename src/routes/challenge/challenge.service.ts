@@ -95,4 +95,38 @@ export class ChallengeService extends BaseService<
     );
     return this.create(data);
   }
+
+  async acceptChallenge(challengeId: number, userId: number) {
+    const challenge = await this.findOne(challengeId, {
+      relations: ['requested'],
+    });
+    if (!challenge) {
+      throw new HttpException('Challenge not found', HttpStatus.NOT_FOUND);
+    }
+    if (challenge.requested.id !== userId) {
+      throw new HttpException(
+        'You are not allowed to accept this challenge',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+    challenge.status = ChallengeStatus.Accepted;
+    return this.challengeRepository.save(challenge);
+  }
+
+  async rejectChallenge(challengeId: number, userId: number) {
+    const challenge = await this.findOne(challengeId, {
+      relations: ['requested'],
+    });
+    if (!challenge) {
+      throw new HttpException('Challenge not found', HttpStatus.NOT_FOUND);
+    }
+    if (challenge.requested.id !== userId) {
+      throw new HttpException(
+        'You are not allowed to reject this challenge',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+    await this.challengeRepository.delete(challengeId);
+    return { message: 'Challenge rejected' };
+  }
 }

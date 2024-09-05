@@ -60,4 +60,22 @@ export class ChallengeController extends ControllerFactory<
   ) {
     return this.service.createChallenge(data, user.id, requestedId);
   }
+
+  @Post('accept/:challengeId')
+  @Roles(UserRole.User)
+  async acceptChallenge(
+    @CurrentUser() user: User,
+    @Param('challengeId') challengeId: number,
+  ) {
+    return this.service.acceptChallenge(challengeId, user.id);
+  }
+
+  @Post('reject/:challengeId')
+  @Roles(UserRole.User)
+  async rejectChallenge(
+    @CurrentUser() user: User,
+    @Param('challengeId') challengeId: number,
+  ) {
+    return this.service.rejectChallenge(challengeId, user.id);
+  }
 }
