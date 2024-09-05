@@ -11,6 +11,7 @@ import { PostModule } from './routes/post/post.module';
 import { TrainingDateModule } from './routes/training_dates/training_date.module';
 import { ExerciseModule } from './routes/exercise/exercise.module';
 import { TrainingModule } from './routes/training/training.module';
+import { ChallengeModule } from './routes/challenge/challenge.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { TrainingModule } from './routes/training/training.module';
     TrainingDateModule,
     ExerciseModule,
     TrainingModule,
+    ChallengeModule,
   ],
   providers: [
     {

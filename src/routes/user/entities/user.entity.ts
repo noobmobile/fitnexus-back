@@ -1,6 +1,7 @@
 import { ApiHideProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { UserRole } from 'src/routes/auth/models/UserRole';
+import { Challenge } from 'src/routes/challenge/entities/challenge.entity';
 import { Notification } from 'src/routes/notification/entities/notification.entity';
 import { Post } from 'src/routes/post/entities/post.entity';
 import { TrainingDate } from 'src/routes/training_dates/entities/training_date.entity';
@@ -70,4 +71,10 @@ export class User {
 
   @OneToMany(() => TrainingDate, (trainingDate) => trainingDate.user)
   trainingDates: TrainingDate[];
+
+  @OneToMany(() => Challenge, (challenge) => challenge.requester)
+  requesterChallenges: Challenge[];
+
+  @OneToMany(() => Challenge, (challenge) => challenge.requested)
+  requestedChallenges: Challenge[];
 }
