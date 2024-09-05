@@ -148,10 +148,8 @@ export class UserService extends BaseService<
         name: ILike(`%${filter.name}%`),
       },
     });
-    data.data.forEach((user: any) => {
-      user.solicitated = !!friendRequests.find(
-        (friend) => friend.id === user.id,
-      );
+    data.data.forEach((u: any) => {
+      u.solicitated = !!friendRequests.find((friend) => friend.id === user.id);
     });
     return data;
   }
