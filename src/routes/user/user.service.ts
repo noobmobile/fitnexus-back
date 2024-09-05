@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { FindOptionsWhere, ILike, In, Repository } from 'typeorm';
+import { FindOptionsWhere, ILike, In, Not, Repository } from 'typeorm';
 import { BaseService } from '../../base/base.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserFilter } from './dto/find-user.dto';
@@ -135,6 +135,19 @@ export class UserService extends BaseService<
       where: {
         id: In(friends.map((friend) => friend.id)),
       },
+    });
+  }
+
+  async findSuggestions(filter: UserFilter, user: User) {
+    const { friends } = await super.findOne(user.id, {
+      relations: ['friends'],
+    });
+    return super.findAll(filter, {
+      where: {
+        id: Not(In(friends.map((friend) => friend.id))),
+        name: ILike(`%${filter.name}%`),
+      },
+      relations: ['friendRequests'],
     });
   }
 

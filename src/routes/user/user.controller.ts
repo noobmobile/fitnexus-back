@@ -30,6 +30,12 @@ export class UserController extends ControllerFactory<
     return this.userService.findFriends(filter, user);
   }
 
+  @Get('friends/suggestions')
+  @Roles(UserRole.User)
+  findSuggestions(@Query() filter: UserFilter, @CurrentUser() user: User) {
+    return this.userService.findSuggestions(filter, user);
+  }
+
   @Get('friends/requests')
   @Roles(UserRole.User)
   findFriendsRequests(@Query() filter: BaseFilter, @CurrentUser() user: User) {
