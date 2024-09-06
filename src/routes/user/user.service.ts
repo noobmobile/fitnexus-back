@@ -181,7 +181,11 @@ export class UserService extends BaseService<
       relations: ['friends', 'friendRequests'],
     })) as any;
     user.posts = (
-      await this.postService.findAll({ userId: id } as PostFilter)
+      await this.postService.findAll({
+        userId: id,
+        order: 'id',
+        sort: 'DESC',
+      } as PostFilter)
     ).data;
     user.trainings = (
       await this.trainingService.findUserTrainings({} as BaseFilter, id)
