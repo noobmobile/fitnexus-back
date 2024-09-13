@@ -74,4 +74,10 @@ export class UserController extends ControllerFactory<
   findProfile(@Param('id') id: number) {
     return this.userService.findProfile(id);
   }
+
+  @Get()
+  @Roles(UserRole.Trainer)
+  findAll(@Query() filter: UserFilter) {
+    return this.userService.findAll(filter);
+  }
 }
