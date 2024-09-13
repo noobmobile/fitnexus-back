@@ -8,6 +8,8 @@ import { Challenge } from './entities/challenge.entity';
 import { ConquestService } from '../conquest/conquest.service';
 import { ChallengeFilter } from './dto/find-challenge.dto';
 import { ChallengeStatus } from './entities/challenge.status';
+import { TrainingDateService } from '../training_dates/training_date.service';
+import { TrainingDateFilter } from '../training_dates/dto/find-training_date.dto';
 
 @Injectable()
 export class ChallengeService extends BaseService<
@@ -19,11 +21,12 @@ export class ChallengeService extends BaseService<
     @InjectRepository(Challenge)
     private challengeRepository: Repository<Challenge>,
     private readonly conquestService: ConquestService,
+    private readonly trainingDateService: TrainingDateService,
   ) {
     super(challengeRepository);
   }
 
-  findAll(filter: ChallengeFilter) {
+  async findAll(filter: ChallengeFilter) {
     let where = {} as any;
     if (filter.requestedId && filter.requesterId && filter.status) {
       where = [
@@ -35,16 +38,45 @@ export class ChallengeService extends BaseService<
       if (filter.requesterId) where.requester = { id: filter.requesterId };
       if (filter.requestedId) where.requested = { id: filter.requestedId };
     }
-    return super.findAll(filter, {
+    const response = await super.findAll(filter, {
       where,
       relations: ['requester', 'requested'],
     });
+    const challengesWithProgress = await Promise.all(
+      response.data.map(async (challenge: any) => {
+        const progress = await this.getChallengeProgress(challenge);
+        return { ...challenge, progress };
+      }),
+    );
+    response.data = challengesWithProgress;
+    return response;
   }
 
   async findMyChallenges(filter: ChallengeFilter, userId: number) {
     filter.requesterId = userId;
     filter.requestedId = userId;
     return this.findAll(filter);
+  }
+
+  async getChallengeProgress(challenge: Challenge) {
+    const totalGoal = challenge.workouts_goal * challenge.weeks_duration;
+    const requesterTrainings = await this.trainingDateService.findAll({
+      userId: challenge.requester.id,
+      dateStart: challenge.start_date,
+      dateEnd: challenge.end_date,
+    } as TrainingDateFilter);
+    const requestedTrainings = await this.trainingDateService.findAll({
+      userId: challenge.requested.id,
+      dateStart: challenge.start_date,
+      dateEnd: challenge.end_date,
+    } as TrainingDateFilter);
+    const requesterProgress = requesterTrainings.data.length;
+    const requestedProgress = requestedTrainings.data.length;
+    const totalProgress = requesterProgress + requestedProgress;
+
+    const percentage = Math.floor((totalProgress / totalGoal) * 100);
+
+    return Math.min(percentage, 100);
   }
 
   async createChallenge(

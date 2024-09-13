@@ -12,7 +12,10 @@ export class TrainingDateFilter extends BaseFilter {
   userId: number;
   @IsOptional()
   @IsDateString()
-  date: Date;
+  dateStart: Date;
+  @IsOptional()
+  @IsDateString()
+  dateEnd: Date;
   @IsOptional()
   @IsBoolean()
   isThisWeek: boolean;

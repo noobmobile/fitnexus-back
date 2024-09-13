@@ -16,9 +16,9 @@ export class BaseFilter {
 
   @IsNumber()
   @Min(0)
-  @ApiProperty({ required: false, default: 10 })
+  @ApiProperty({ required: false, default: 100 })
   @Transform(({ value }) => parseInt(value))
-  public limit: number = 10;
+  public limit: number = 100;
 
   @IsString()
   @ApiProperty({ required: false, default: 'id' })

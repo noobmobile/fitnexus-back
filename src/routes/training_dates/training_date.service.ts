@@ -28,6 +28,9 @@ export class TrainingDateService extends BaseService<
     if (filter.isThisWeek) {
       where.date = Between(startOfWeek(), endOfWeek());
     }
+    if (filter.dateStart && filter.dateEnd) {
+      where.date = Between(filter.dateStart, filter.dateEnd);
+    }
     return super.findAll(filter, {
       where,
     });
