@@ -35,8 +35,11 @@ export class TrainingService extends BaseService<
       relations: ['users'],
     });
     if (!training.users) training.users = [];
-    if (training.users.find((u) => u.id === userId)) return training;
-    training.users.push({ id: userId } as any);
+    if (training.users.find((u) => u.id === userId)) {
+      training.users = training.users.filter((u) => u.id !== userId);
+    } else {
+      training.users.push({ id: userId } as any);
+    }
     return this.trainingRepository.save(training);
   }
 
