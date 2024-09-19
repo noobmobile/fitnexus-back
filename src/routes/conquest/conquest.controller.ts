@@ -22,4 +22,10 @@ export class ConquestController {
   findMyPosts(@CurrentUser() user: User) {
     return this.conquestService.findUserConquests(user.id);
   }
+
+  @Get()
+  @Roles(UserRole.User)
+  findAll() {
+    return this.conquestService.findAll();
+  }
 }

@@ -96,4 +96,8 @@ export class ConquestService {
       where: { users: { id: userId } },
     });
   }
+
+  async findAll() {
+    return { data: await this.repository.find() };
+  }
 }
