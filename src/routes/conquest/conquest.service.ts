@@ -98,6 +98,6 @@ export class ConquestService {
   }
 
   async findAll() {
-    return { data: await this.repository.find() };
+    return await this.repository.find() ;
   }
 }
